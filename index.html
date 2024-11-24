@@ -1,43 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/style.css">
   <title>D3 Js</title>
 </head>
+
 <body>
-  <svg>
-    <!--
-    <circle cx="50" cy="50" r="30"></circle>
-    <rect
-    x="10"
-    y="100"
-    width="100"
-    height="50"
-    fill="green"
-    stroke="red"
-    stroke-width="3"
-    ></rect>
-    
-    <line
-    x1="0"
-    y1="0"
-    x2="300"
-    y2="300"
-    stroke="red"
-    fill="black"
-    ></line> 
-    -->
-    <path d="M 10 10 H 4 V 4 H 10 Z" fill="transparent" stroke="black"/>
-    <path d="M 40 40 L 40 0" 
-    fill="transparent" 
-    stroke="black"/>
+  <svg class="svg">
+
   </svg>
-  
-  <script type="module" src="js/index.js" charset="utf-8">
-    
+
+  <script type="module" src="js/d3.v7.min.js" charset="utf-8">
+    import * as d3 from './d3.v7.min.js';
+
   </script>
-  
+  <script type="module">
+   const dataset = [
+                  [ 34,     78 ],
+                  [ 109,   280 ],
+                  [ 310,   120 ],
+                  [ 79,   411 ],
+                  [ 420,   220 ],
+                  [ 233,   145 ],
+                  [ 333,   96 ],
+                  [ 222,    333 ],
+                  [ 78,    320 ],
+                  [ 21,   123 ]
+                ];
+
+    const w = 500;
+    const h = 500;
+    const padding = 60;
+    let xScale = d3.scaleLinear()
+      .domain([0, d3.max(dataset, (d) => d[0])])
+      .range([padding ,w - padding]);
+
+      let yScale = d3.scaleLinear()
+      .domain([0, d3.max(dataset, (d) => d[1])])
+      .range([h - padding , padding]);
+
+    let svg = d3.select('.svg')
+    .attr('width','500px')
+    .attr('height','500px');
+
+      svg.selectAll('circle')
+      .data(dataset)
+      .enter()
+      .append('circle')
+      // .attr('cx', (d) => xScale(d[0]))
+      // .attr('cy', (d) => yScale([1]))
+      .attr('cx', (d) => xScale(d[0]))
+      .attr('cy', (d) => yScale(d[1]))
+      .attr('r', 5)
+      .attr('fill','red');
+
+    const xAxis = d3.axisBottom(xScale);
+    const yAxis = d3.axisLeft(yScale);
+
+    svg.append('g')
+    .attr('transform', "translate(0,"+ (h - padding )+")")
+    .call(xAxis)
+
+    svg.append('g')
+    .attr('transform', "translate("+ (padding ) +",0)")
+    .call(yAxis);
+
+
+
+  </script>
 </body>
+
 </html>
